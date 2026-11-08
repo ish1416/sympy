@@ -66,6 +66,14 @@ def test_slicing():
     assert X7[2:7:3, :].shape == (2, 7)
 
 
+    # Nonzero start slices
+    X_non0 = MatrixSymbol('X', 7, 7)
+    assert X_non0[1:6:2, :].shape == (3, 7)
+    assert X_non0[2:7:3, :].shape == (2, 7)
+    M_non0 = Matrix(7, 7, lambda i, j: 10*i + j)
+    assert X_non0[1:6:2, :].subs(X_non0, M_non0).as_explicit() == M_non0[1:6:2, :]
+    assert X_non0[2:7:3, :].subs(X_non0, M_non0).as_explicit() == M_non0[2:7:3, :]
+
 def test_exceptions():
     X = MatrixSymbol('x', 10, 20)
     raises(IndexError, lambda: X[0:12, 2])
